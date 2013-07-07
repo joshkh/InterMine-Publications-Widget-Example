@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>InterMine Widget Example</title>
+<meta charset="UTF-8">
+<!--[if IE]><![endif]-->
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/JavaScript" src="http://cdn.intermine.org/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+<script type="text/JavaScript" src="http://underscorejs.org/underscore-min.js"></script>
+<script type="text/JavaScript" src="http://backbonejs.org/backbone-min.js"></script>
+
+<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+<div class="container clearfix">
+
+	<div id="maincont" class="clearfix">
+	
+			<h1>InterMine Publications Widget</h1>
+			
+            <p>The following embedded widget queries one-to-many InterMine mines for publications whose authors match a keyword.</p>
+            
+            <h2>Features:</h2>
+            
+            <ul>
+            	<li>Queries one-to-many InterMine sources configured as an array inside of the widget (more may be added).</li>
+            	<li>Reports the number of publications when finished.</li>
+            	<li>Accounts for duplicate sources and authors from different mines.</li>
+            	<li>HTML target and search term are passed as parameters upon load.</li>
+            	<li>Titles link to their respective PubMed articles.</li>
+            	<li>Widget follows module pattern and is self contained to avoid clashing with other namespaces.</li>
+            </ul>
+            
+            <h2>Usage:</h2>
+            
+            <ul>
+            	<li>Include publications.js</li>
+            	<li>Include images and css folders (optional)</li>
+            	<li>Call the widget:<br />PublicationsWidget.initial('Micklem G', '#publicationsContainer');</li>
+            </ul>
+            	
+            
+            <h2>Notes:</h2>
+            
+            <ul>
+            	<li><a href="#surprises">Click for notes.</a></li>
+            </ul>
+            
+			<div id="publicationsContainer"></div>
+			
+            <br />
+            <a id="surprises"><h2>Notes</h2></a>
+            
+            <ul>
+            	<li>After modifying the XML Path-Query to include a JOIN, I was still unable to generate a response where authors were grouped within the JSON response. This required extra overhead to manipulate and then combine the results within the widget itself. I'm sure there's a craftier way of accomplishing this.<br /><code>&lt;query model=&quot;genomic&quot; view=&quot;Author.publications.pubMedId Author.publications.title Author.publications.journal Author.publications.year Author.publications.authors.name&quot; &gt; &lt;join path=&quot;Author.publications.authors&quot; style=&quot;OUTER&quot;/&gt; &lt;constraint path=&quot;Author.name&quot; op=&quot;CONTAINS&quot; value=&quot;anAuthor&quot; code=&quot;A&quot; /&gt; &lt;/query&gt;</code></li>
+            	<li>Querying the API did not return key->value pairs for "Results". For this reason the code maps array indicies to expected "columns" (for instance, response[0] == pubMedId). This works because the API returns the same structure across different mines, but could potentially cause problems if the API changes.</li>
+            </ul>
+            
+            <h2>Room For Improvement</h2>
+            
+            <ul>
+            	<li>Pagination!</li>
+            	<li>Load required javascript libraries from within code to avoid version clashes.</li>
+            	<li>Add support to continue-on-error if one of the mines is unreachable.</li>
+            	<li>Improve CSS for better cross-browser compatibility (I hacked apart a free template.)</li>
+            </ul>
+
+	</div>
+</div>
+
+
+<script type="text/JavaScript" src="js/PublicationsWidget.js"></script>
+<script>
+	PublicationsWidget.initial('Micklem G', '#publicationsContainer');
+</script>
+
+</body>
+</html>
